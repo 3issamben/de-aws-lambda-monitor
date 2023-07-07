@@ -22,11 +22,11 @@ COPY --from=build /opt/chrome-linux /opt/chrome
 COPY --from=build /opt/chromedriver /opt/
 
 # Copy your Python script
-COPY main.py ./
+COPY main.py ${LAMBDA_TASK_ROOT}
 
 # Install python dependencies
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
 
 # Set the command to be executed when running the container
 CMD [ "main.lambda_handler" ]
