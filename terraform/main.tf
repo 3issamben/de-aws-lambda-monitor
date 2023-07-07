@@ -1,3 +1,4 @@
+# Lambda 
 data "aws_iam_policy_document" "iam_policy_document" {
   statement {
     actions = [
@@ -29,6 +30,8 @@ resource "aws_iam_role" "iam_for_lambda" {
 EOF
 }
 
+
+
 resource "aws_iam_role_policy" "iam_policy_for_lambda" {
   name = "${var.region}-${var.application}-policy"
   role = aws_iam_role.iam_for_lambda.id
@@ -37,46 +40,48 @@ resource "aws_iam_role_policy" "iam_policy_for_lambda" {
 }
 
 resource "aws_lambda_function" "lambda_function" {
-  filename      = "../function.zip"
-  function_name = "${var.application}-lambda"
-  role          = aws_iam_role.iam_for_lambda.arn
-  handler       = "lambda_function.lambda_handler"
 
-  layers = [
-    aws_lambda_layer_version.selenium.arn,
-    "arn:aws:lambda:us-east-1:599129187124:layer:chromedriver:1"
+  depends_on = [
+    null_resource.ecr_image
   ]
 
-  source_code_hash = filebase64sha256("../function.zip")
-
-  runtime = "python3.9"
+  function_name = "${var.application}-lambda"
+  role          = aws_iam_role.iam_for_lambda.arn
+  image_uri     = "${aws_ecr_repository.repo.repository_url}@${data.aws_ecr_image.lambda_image.id}"
+  package_type  = "Image"
+  timeout       = 300
 
 }
 
 
-resource "aws_lambda_layer_version" "selenium" {
-  filename            = "../python.zip"
-  layer_name          = "selenium"
-  source_code_hash    = filebase64sha256("../python.zip")
-  compatible_runtimes = ["python3.9"]
+## ECR
+
+resource "aws_ecr_repository" "repo" {
+  name                 = "${var.application}-ecr"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = false
+  }
 }
 
-resource "aws_lambda_layer_version" "chromedriver" {
-  s3_bucket           = aws_s3_bucket.lambda_packages.id
-  s3_key              = "chromedriver.zip"
-  layer_name          = "chromedriver"
-  source_code_hash    = filebase64sha256("../chromedriver.zip")
-  compatible_runtimes = ["python3.9"]
+resource "null_resource" "ecr_image" {
+  triggers = {
+    python_file = md5(file("${path.module}/${local.app_dir}/main.py"))
+    docker_file = md5(file("${path.module}/${local.app_dir}/Dockerfile"))
+  }
+
+  provisioner "local-exec" {
+    command = <<EOF
+      aws ecr get-login-password --region ${var.region} | docker login --username AWS --password-stdin ${local.account_id}.dkr.ecr.${var.region}.amazonaws.com
+      cd ${path.module}/${local.app_dir}
+      docker build -t ${aws_ecr_repository.repo.repository_url}:latest .
+      docker push ${aws_ecr_repository.repo.repository_url}:latest
+    EOF
+  }
 }
 
-
-resource "aws_s3_bucket" "lambda_packages" {
-  bucket = "de-aws-lambda-packages"
-}
-
-resource "aws_lambda_permission" "apigw_lambda" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.lambda_function.function_name
-  principal     = "apigateway.amazonaws.com"
+data "aws_ecr_image" "lambda_image" {
+  repository_name = "${var.application}-ecr"
+  image_tag       = "latest"
 }
