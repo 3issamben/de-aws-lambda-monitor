@@ -22,7 +22,7 @@ COPY --from=build /opt/chrome-linux /opt/chrome
 COPY --from=build /opt/chromedriver /opt/
 
 # Copy your Python script
-COPY main.py ${LAMBDA_TASK_ROOT}
+COPY *.py ${LAMBDA_TASK_ROOT}
 
 # Install python dependencies
 COPY requirements.txt .
