@@ -1,21 +1,21 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import os
-from .task_api import task_api
-from .logger_config import logger
-from .logger_config import log_stream
+from task_api import task_api
+from logger_config import logger
+from logger_config import log_stream
 import time
-from .utils import calculate_execution_time
+from utils import calculate_execution_time
 from selenium.webdriver.firefox.service import (
     Service as FirefoxService,
 )
 from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
-
-
-from selenium.webdriver.ie.service import Service as IEService
-from webdriver_manager.microsoft import IEDriverManager
+from tempfile import mkdtemp
+from selenium.webdriver.firefox.options import (
+    Options as FirefoxOptions,
+)
 
 
 def finish_task(driver, task_id, result_id):
@@ -234,23 +234,43 @@ def element_look_for_pattern(
 def set_driver(driver_id):
     # TOD add try catch statement ?
     logger.info(f"setting driver {driver_id}")
+    driver = None
     if driver_id == 1:
         logger.info("Creating Chrome driver")
-        driver = webdriver.Chrome(
-            service=ChromeService(ChromeDriverManager().install())
-        )
+        options = webdriver.ChromeOptions()
+        options.binary_location = "/opt/chrome/chrome"
+        options.add_argument("--headless")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--window-size=1280x1696")
+        options.add_argument("--single-process")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--disable-dev-tools")
+        options.add_argument("--no-zygote")
+        options.add_argument(f"--user-data-dir={mkdtemp()}")
+        options.add_argument(f"--data-path={mkdtemp()}")
+        options.add_argument(f"--disk-cache-dir={mkdtemp()}")
+        options.add_argument("--remote-debugging-port=9222")
+        driver = webdriver.Chrome("/opt/chromedriver", options=options)
     elif driver_id == 2:
         logger.info("Creating Internet Explorer driver")
-        driver = webdriver.Ie(
-            service=IEService(IEDriverManager().install())
-        )
+        # TODO figure out how to handle IE 
+        # since docker does not support IE
+        # Maybe finish task
+
     elif driver_id == 3:
         logger.info("Creating Firefox driver")
+        options = FirefoxOptions()
+        options.binary_location = "/opt/firefox/firefox"
+        options.add_argument("--headless")
+
         driver = webdriver.Firefox(
-            service=FirefoxService(GeckoDriverManager().install())
+            service=FirefoxService(
+                executable_path="/opt/geckodriver"
+            ),
+            options=options,
         )
     else:
-        driver = None
         logger.error("Invalid browser")
 
     return driver
