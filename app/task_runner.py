@@ -9,9 +9,7 @@ from utils import calculate_execution_time
 from selenium.webdriver.firefox.service import (
     Service as FirefoxService,
 )
-from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
 from tempfile import mkdtemp
 from selenium.webdriver.firefox.options import (
     Options as FirefoxOptions,
@@ -251,10 +249,15 @@ def set_driver(driver_id):
         options.add_argument(f"--data-path={mkdtemp()}")
         options.add_argument(f"--disk-cache-dir={mkdtemp()}")
         options.add_argument("--remote-debugging-port=9222")
-        driver = webdriver.Chrome("/opt/chromedriver", options=options)
+        driver = webdriver.Chrome(
+            service=ChromeService(
+                executable_path="/opt/chromedriver"
+            ),
+            options=options,
+        )
     elif driver_id == 2:
         logger.info("Creating Internet Explorer driver")
-        # TODO figure out how to handle IE 
+        # TODO figure out how to handle IE
         # since docker does not support IE
         # Maybe finish task
 
