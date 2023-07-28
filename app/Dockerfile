@@ -8,11 +8,14 @@ ARG GECKODRIVER=0.33.0
 ARG CHROMEDRIVER=114.0.5735.90
 ARG CHROME_VERSION
 
+# Chrome installation
 RUN curl -Lo "/tmp/chromedriver.zip" "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER}/chromedriver_linux64.zip" && \
     curl -Lo "/tmp/chrome-linux.zip" "https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2F1135561%2Fchrome-linux.zip?alt=media" && \
     unzip /tmp/chromedriver.zip -d /opt/ && \
-    unzip /tmp/chrome-linux.zip -d /opt/ && \
-    curl -Lo "/tmp/firefox.tar.bz2" "https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2" \
+    unzip /tmp/chrome-linux.zip -d /opt/
+
+# Firefox installation
+RUN  curl -Lo "/tmp/firefox.tar.bz2" "https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2" \
     && curl -Lo "/tmp/geckodriver.tar.gz" "https://github.com/mozilla/geckodriver/releases/download/v${GECKODRIVER}/geckodriver-v${GECKODRIVER}-linux64.tar.gz" \
     && tar xvjf /tmp/firefox.tar.bz2 -C /opt \
     && tar -xzf /tmp/geckodriver.tar.gz -C /opt \
