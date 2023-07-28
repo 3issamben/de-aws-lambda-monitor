@@ -1,4 +1,4 @@
-from .logger_config import logger
+from logger_config import logger
 from urllib.parse import urlsplit
 import socket
 import json

@@ -1,6 +1,6 @@
-from .logger_config import logger
-from .utils import dns_resolution
-from .task_runner import (
+from logger_config import logger
+from utils import dns_resolution
+from task_runner import (
     set_driver,
     element_go_to_url,
     element_delay,
@@ -178,6 +178,3 @@ def task_main(task):
         raise
         # Call finish task
         finish_task(driver=None, result_id=4, task_id=task_id)
-
-
-main()

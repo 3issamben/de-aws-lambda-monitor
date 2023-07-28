@@ -1,6 +1,6 @@
 import requests
-from .logger_config import logger
-from .utils import is_json
+from logger_config import logger
+from utils import is_json
 import os
 
 api_base_url = os.environ.get(
