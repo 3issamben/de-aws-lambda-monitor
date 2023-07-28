@@ -10,17 +10,12 @@ from task_runner import (
     element_click,
     finish_task,
 )
-import os
 from task_api import task_api
 
-# Settings
 
-pullerID = os.environ.get("PULLER_ID", "11")
-
-
-def main():
+def main(puller_id):
     # Create tasks
-    params = {"puller_id": pullerID}
+    params = {"puller_id": puller_id}
     create_task = task_api("spCreateDueTasksForPuller", params)
     logger.info(f"create task response: {create_task}")
 
@@ -175,6 +170,5 @@ def task_main(task):
             logger.error("task_url not in task {task_info}")
     except Exception as e:
         logger.error(f"Something went wrong {e}")
-        raise
         # Call finish task
         finish_task(driver=None, result_id=4, task_id=task_id)
