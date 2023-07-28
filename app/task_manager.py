@@ -26,10 +26,12 @@ def main(puller_id):
     logger.info("processing tasks")
     if created_tasks is None or len(created_tasks) == 0:
         logger.info("No tasks to process.")
+        return "No tasks to process."
     else:
         for task in created_tasks:
             logger.info(f"processing task {task}")
             task_main(task=task)
+    return f"task processing completed. tasks processed: {len(created_tasks)}"
 
 
 def execute_task(driver, task_elements, task_url, task_id):
