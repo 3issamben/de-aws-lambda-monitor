@@ -34,7 +34,9 @@ def main(puller_id):
     return f"task processing completed. tasks processed: {len(created_tasks)}"
 
 
-def execute_task(driver, task_elements, task_url, task_id):
+def execute_task(
+    driver, task_elements, task_url, task_id, task_pattern
+):
     driver.maximize_window()
     driver.implicitly_wait(10)
     driver.set_page_load_timeout(30)
@@ -86,6 +88,16 @@ def execute_task(driver, task_elements, task_url, task_id):
                      task_id {task_id}"
             )
     logger.info("---------------------------------------")
+    element_look_for_pattern(
+        driver=driver,
+        lookfor="",
+        method="",
+        index=0,
+        pattern=task_pattern,
+        skipScroll="",
+        task_id=task_id,
+    )
+    finish_task(driver=None, task_id=task_id, result_id=2)
 
 
 def process_task(task_info, task_elements):
@@ -124,6 +136,7 @@ def process_task(task_info, task_elements):
                 task_elements=task_elements,
                 task_url=task_info["task_url"],
                 task_id=task_info["task_id"],
+                task_pattern=task_info["task_pattern"],
             )
         else:
             # finish task

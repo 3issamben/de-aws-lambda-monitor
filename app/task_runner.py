@@ -226,7 +226,7 @@ def element_look_for_pattern(
         )
         finish_task(driver=driver, result_id=4, task_id=task_id)
 
-        # sys.exit()  # Use sys.exit() to stop the program execution
+        # sys.exit()
 
 
 def set_driver(driver_id):
