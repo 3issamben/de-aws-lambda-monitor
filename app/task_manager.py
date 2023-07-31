@@ -87,16 +87,16 @@ def execute_task(
                 f"Unknown element type {el['element_type_name']}\
                      task_id {task_id}"
             )
-    logger.info("---------------------------------------")
-    element_look_for_pattern(
-        driver=driver,
-        lookfor="",
-        method="",
-        index=0,
-        pattern=task_pattern,
-        skipScroll="",
-        task_id=task_id,
-    )
+    # TODO Not sure if we need to run this?
+    # element_look_for_pattern(
+    #     driver=driver,
+    #     lookfor="",
+    #     method="",
+    #     index=0,
+    #     pattern=task_pattern,
+    #     skipScroll="",
+    #     task_id=task_id,
+    # )
     finish_task(driver=None, task_id=task_id, result_id=2)
 
 

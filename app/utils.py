@@ -65,4 +65,4 @@ def calculate_execution_time(logs):
 
     execution_time = end_time - start_time
 
-    return execution_time.total_seconds()
+    return execution_time.total_seconds() * 1000
