@@ -36,12 +36,7 @@ def make_request(url, data):
 def task_api(action, parameters):
     api_url = f"{api_base_url}?sp={action}"
 
-    if action != "spFinishTask":
-        # spFinishTask contains a log dump
-        # which generates a lot of noise
-        logger.info(
-            f"Calling method {action} with params {parameters}"
-        )
+    logger.info(f"Calling method {action} with params {parameters}")
 
     response = make_request(api_url, parameters)
 
