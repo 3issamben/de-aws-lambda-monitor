@@ -25,4 +25,4 @@ logger.setLevel(logging.INFO)
 
 # Add the stream and console handler to your logger
 logger.addHandler(stream_handler)
-logger.addHandler(console_handler)
+# logger.addHandler(console_handler)
