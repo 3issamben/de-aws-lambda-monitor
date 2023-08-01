@@ -175,7 +175,7 @@ def element_fill(
     )
 
     if not skipClick:
-        logger.info(f"clicking on element {element}")
+        logger.info("clicking on element")
         element.click()
 
     logger.info(f"sending keys {value}")
