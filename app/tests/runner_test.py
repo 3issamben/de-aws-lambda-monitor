@@ -6,7 +6,7 @@ from app.task_runner import (
     element_accept_alert,
     element_delay,
     element_find,
-    finish_task
+    finish_task,
 )
 
 
@@ -59,9 +59,7 @@ def test_element_accept_alert(mocker):
     mock_alert.accept.assert_called_once()
 
 
-@patch(
-    "app.task_runner.element_find_internal", return_value=Mock()
-)
+@patch("app.task_runner.element_find_internal", return_value=Mock())
 @patch("app.task_runner.time.sleep")  # Mock sleep to avoid delay
 def test_element_find_found(mock_sleep, mock_element_find_internal):
     mock_driver = Mock()
@@ -97,9 +95,7 @@ def test_element_go_to_url(mock_info):
     mock_driver = Mock()
     element_go_to_url(mock_driver, "https://www.example.com")
     mock_info.assert_called_once_with(
-        "Navigating to https://www.example.com using driver {}".format(
-            mock_driver
-        )
+        "Navigating to https://www.example.com"
     )
     mock_driver.get.assert_called_once_with("https://www.example.com")
 
