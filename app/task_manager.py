@@ -139,13 +139,11 @@ def process_task(task_info, task_elements):
                 task_pattern=task_info["task_pattern"],
             )
         else:
-            # finish task
             finish_task(
                 driver=None, task_id=task_info["task_id"], result_id=4
             )
             logger.error("driver id not supported")
     else:
-        # finish task
         logger.error(f"driver id not found in task {task_info}")
         finish_task(
             driver=None, task_id=task_info["task_id"], result_id=4
@@ -153,7 +151,6 @@ def process_task(task_info, task_elements):
 
 
 def task_main(task):
-    task = {"task_id": 127838500}
     task_id = task["task_id"]
 
     try:
@@ -179,11 +176,9 @@ def task_main(task):
                 process_task(task_info, task_elements)
             else:
                 logger.error(f"finish task with id {task_id}")
-                # TODO enable after done
                 finish_task(driver=None, result_id=4, task_id=task_id)
         else:
             logger.error("task_url not in task {task_info}")
     except Exception as e:
         logger.error(f"Something went wrong {e}")
-        # Call finish task
         finish_task(driver=None, result_id=4, task_id=task_id)

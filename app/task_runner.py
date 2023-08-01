@@ -92,7 +92,6 @@ def element_find(
             time.sleep(5)
 
     logger.info(f"Element '{lookfor}' not found. Exiting.")
-    # TODO update task id
     finish_task(driver=driver, result_id=4, task_id=task_id)
 
 
