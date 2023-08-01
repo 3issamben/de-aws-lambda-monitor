@@ -37,7 +37,7 @@ def finish_task(driver, task_id, result_id):
         "task_dump": log_contents,
     }
 
-    logger.info(f"calling spFinishTask with params {params}")
+    logger.info("calling spFinishTask")
     task_api("spFinishTask", params)
 
 
