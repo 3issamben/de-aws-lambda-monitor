@@ -36,4 +36,4 @@ def test_is_json():
 
 def test_calculate_execution_time():
     logs = "2023-07-25 13:30:00,000 - INFO - Start\n2023-07-25 13:30:01,500 - INFO - End"
-    assert calculate_execution_time(logs) == 1.5
+    assert calculate_execution_time(logs) == 1500
