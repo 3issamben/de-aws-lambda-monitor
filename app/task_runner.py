@@ -279,7 +279,7 @@ def set_driver(driver_id):
 
 
 def element_go_to_url(driver, url):
-    logger.info(f"Navigating to {url} using driver {driver}")
+    logger.info(f"Navigating to {url}")
     driver.get(url)
 
 
