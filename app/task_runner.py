@@ -27,7 +27,7 @@ def finish_task(driver, task_id, result_id):
     # TODO call function that appends logs(update logging to output to a
     #  file then use the generated logging file)
 
-    log_contents = log_stream.getvalue()
+    log_contents = "<pre>" + log_stream.getvalue() + "</pre>"
     execution_time = calculate_execution_time(log_contents)
     logger.info(f"execution time {execution_time}")
     params = {
